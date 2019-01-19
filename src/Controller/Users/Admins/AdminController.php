@@ -108,6 +108,20 @@ class AdminController extends AbstractController
             $user->setPassword($password);
             $user->setIsActive(true);
 
+
+            $file = new File($user->getAvatar());
+            $fileName = md5(uniqid()).'.'.$file->guessExtension();
+            try {
+                $file->move(
+                    $this->getParameter('avatar_directory'),
+                    $fileName
+                );
+            } catch (FileException $e) {
+                die($e->getMessage());
+            }
+
+            $user->setAvatar($fileName);
+
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();

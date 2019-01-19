@@ -14,6 +14,7 @@ use App\Form\UserType;
 use App\Repository\UserRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -38,6 +39,12 @@ class MemberController extends AbstractController
      */
     public function profile(Request $request) {
         $user = $this->getUser();
+        $user->setAvatar(
+            new File($this->getParameter('avatar_directory')
+                . '/'
+                . $user->getAvatar()
+            )
+        );
 
         $form = $this->createForm(ProfileType::class, $user);
         $form->get('email')->setData($user->getEmail());
@@ -45,7 +52,21 @@ class MemberController extends AbstractController
         // 2) handle the submit (will only happen on POST)
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $user->addRole('ROLE_ADMIN');
+            if(!empty($form['avatar']->getData())) {
+                $file = new File($user->getAvatar());
+                $fileName = md5(uniqid()).'.'.$file->guessExtension();
+                try {
+                    $file->move(
+                        $this->getParameter('avatar_directory'),
+                        $fileName
+                    );
+                } catch (FileException $e) {
+                    die($e->getMessage());
+                }
+
+                $user->setAvatar($fileName);
+            }
+
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();

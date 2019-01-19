@@ -37,7 +37,6 @@ class User implements UserInterface, \Serializable
     private $email;
 
     /**
-     * @Assert\NotBlank()
      * @Assert\Length(max=250)
      */
     private $plainPassword;
@@ -71,6 +70,12 @@ class User implements UserInterface, \Serializable
      * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="user")
      */
     private $comments;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\File(mimeTypes={ "image/*" })
+     */
+    private $avatar;
 
     public function __construct()
     {
@@ -195,7 +200,7 @@ class User implements UserInterface, \Serializable
      */
     public function eraseCredentials()
     {
-        // TODO: Implement eraseCredentials() method.
+        $this->setPlainPassword('');
     }
 
     public function getResetToken(): ?string
@@ -249,6 +254,18 @@ class User implements UserInterface, \Serializable
                 $comment->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAvatar(): ?string
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar(?string $avatar): self
+    {
+        $this->avatar = $avatar;
 
         return $this;
     }

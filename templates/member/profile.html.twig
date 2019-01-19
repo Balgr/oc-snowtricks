@@ -30,6 +30,7 @@
                     </ul>
                 </div>
             {% endif %}
+            <img src="{{ asset(app.user.avatar) }}">
             <p>Vous pouvez modifier votre profil à partir du formulaire ci-dessous :</p>
             {{ form(form) }}
         </div>
