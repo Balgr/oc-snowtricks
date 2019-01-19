@@ -59,6 +59,13 @@ class SecurityController extends AbstractController
     }
 
     /**
+     * @Route("/logout", name="logout")
+     */
+    public function logout() {
+
+    }
+
+    /**
      * @Route("/recuperation_mot_de_passe", name="recup_password")
      * @param Request $request
      * @param AuthenticationUtils $authenticationUtils

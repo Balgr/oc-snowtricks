@@ -8,11 +8,18 @@
                 </div>
                 <div class="header-menu">
                     <ul>
-                        <li><a>Accueil</a></li>
+                        <li><a href="{{ path('app_homepage_index') }}">Accueil</a></li>
                         <li><a>Tricks</a></li>
                         <li><a>Contact</a></li>
-                        {% if app.user is not null %}
-                            <li><a href="{{ path('logout') }}">Déconnexion</a></li>
+                        {% if is_granted('ROLE_USER') %}
+                            <li id="dropdownMenu2" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <a>Mon compte</a>
+                            </li>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <button class="dropdown-item" type="button">Espace membre</button>
+                                {% if is_granted('ROLE_ADMIN') %}<button class="dropdown-item" type="button">Espace admin</button>{% endif %}
+                                <button class="dropdown-item" type="button"><a href="{{ path('logout') }}">Déconnexion</a></button>
+                            </div>
                         {% else %}
                             <li><a href="{{ path('login') }}">Connexion</a></li>
                             <li><a href="/{{ path('app_registration_register') }}">Inscription</a></li>

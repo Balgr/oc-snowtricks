@@ -1,4 +1,6 @@
 {
+    "name": "Snowtricks",
+    "description": "OpenClassrooms, parcours Développeur PHP/Symfony, projet 6",
     "type": "project",
     "license": "proprietary",
     "require": {
@@ -23,7 +25,8 @@
         "symfony/twig-bundle": "4.2.*",
         "symfony/validator": "4.2.*",
         "symfony/web-link": "4.2.*",
-        "symfony/yaml": "4.2.*"
+        "symfony/yaml": "4.2.*",
+        "vich/uploader-bundle": "^1.8"
     },
     "require-dev": {
         "symfony/debug-pack": "*",
