@@ -39,9 +39,21 @@ class Trick
      */
     private $comments;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\TrickImage", mappedBy="trick", orphanRemoval=true)
+     */
+    private $trickImages;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\TrickVideo", mappedBy="trick", orphanRemoval=true)
+     */
+    private $trickVideos;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+        $this->trickImages = new ArrayCollection();
+        $this->trickVideos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -114,5 +126,79 @@ class Trick
         }
 
         return $this;
+    }
+
+    /**
+     * @return Collection|TrickImage[]
+     */
+    public function getTrickImages(): Collection
+    {
+        return $this->trickImages;
+    }
+
+    public function addTrickImage(TrickImage $trickImage): self
+    {
+        if (!$this->trickImages->contains($trickImage)) {
+            $this->trickImages[] = $trickImage;
+            $trickImage->setTrick($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTrickImage(TrickImage $trickImage): self
+    {
+        if ($this->trickImages->contains($trickImage)) {
+            $this->trickImages->removeElement($trickImage);
+            // set the owning side to null (unless already changed)
+            if ($trickImage->getTrick() === $this) {
+                $trickImage->setTrick(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|TrickVideo[]
+     */
+    public function getTrickVideos(): Collection
+    {
+        return $this->trickVideos;
+    }
+
+    public function addTrickVideo(TrickVideo $trickVideo): self
+    {
+        if (!$this->trickVideos->contains($trickVideo)) {
+            $this->trickVideos[] = $trickVideo;
+            $trickVideo->setTrick($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTrickVideo(TrickVideo $trickVideo): self
+    {
+        if ($this->trickVideos->contains($trickVideo)) {
+            $this->trickVideos->removeElement($trickVideo);
+            // set the owning side to null (unless already changed)
+            if ($trickVideo->getTrick() === $this) {
+                $trickVideo->setTrick(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function setTrickVideos(Collection $trickVideos): self
+    {
+        $this->trickVideos = $trickVideos;
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return "Trick - " . $this->getName();
     }
 }

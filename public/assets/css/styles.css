@@ -176,3 +176,13 @@ ul ul a {
     margin: 10px;
     width: 100%;
 }
+
+
+body {
+    background-color: white;
+}
+
+#nav-and-content {
+    width: 90%;
+    margin: auto;
+}

@@ -18,6 +18,26 @@ class TrickType extends AbstractType
             ->add('name')
             ->add('description')
             ->add('trickGroup')
+            ->add('trickImages', CollectionType::class, array(
+                'entry_type' => TrickImageType::class,
+                'prototype' => true,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'entry_options' => array(
+                    'required' => false
+                ),
+                'by_reference' => false
+            ))
+            /*->add('trickVideos', CollectionType::class, array(
+                'entry_type' => TrickVideoType::class,
+                'prototype' => true,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'entry_options' => array(
+                    'required' => false
+                ),
+                'by_reference' => false
+            ))*/
         ;
     }
 

@@ -14,6 +14,7 @@ use App\Form\UserType;
 use App\Repository\UserRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -61,7 +62,7 @@ class MemberController extends AbstractController
                         $fileName
                     );
                 } catch (FileException $e) {
-                    die($e->getMessage());
+                    echo $e->getMessage();
                 }
 
                 $user->setAvatar($fileName);
