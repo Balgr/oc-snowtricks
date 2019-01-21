@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="wrapper-member">
+        {% block sidebar %}
+            {% include 'member/sidebar.html.twig' %}
+        {% endblock %}
+        <div class="content main-content">
+            <p>Bienvenue dans l'espace de gestion de votre profil.</p>
+        </div>
+    </div>
+{% endblock %}
