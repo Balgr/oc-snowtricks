@@ -1,0 +1,20 @@
+{{ form_start(form) }}
+    {# {{ form_widget(form) }} #}
+    {{ form_label(form.name) }}
+    {{ form_errors(form.name) }}
+    {{ form_widget(form.name) }}
+    {{ form_help(form.name) }}
+<br>
+    {{ form_label(form.description) }}
+    {{ form_errors(form.description) }}
+    {{ form_widget(form.description) }}
+    {{ form_help(form.description) }}
+<br>
+    {{ form_label(form.trickGroup) }}
+    {{ form_errors(form.trickGroup) }}
+    {{ form_widget(form.trickGroup) }}
+    {{ form_help(form.trickGroup) }}
+<br>
+
+    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}

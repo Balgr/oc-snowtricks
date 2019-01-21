@@ -49,6 +49,8 @@ class SecurityController extends AbstractController
             ->add('ok', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class, ['label' => 'Connexion', 'attr' => ['class' => 'btn-primary btn-block']])
             ->getForm();
 
+        var_dump($this->getUser());
+
         return $this->render('security/login.html.twig', [
             'mainNavLogin' => true, 'title' => 'Connexion',
             'form' => $form->createView(),
@@ -56,6 +58,13 @@ class SecurityController extends AbstractController
             'errors' => $this->errors,
             'infos' => $this->infos
         ]);
+    }
+
+    /**
+     * @Route("/logout", name="logout")
+     */
+    public function logout() {
+
     }
 
     /**

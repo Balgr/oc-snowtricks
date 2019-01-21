@@ -10,6 +10,7 @@ namespace App\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -21,8 +22,13 @@ class ProfileType extends AbstractType {
             ->add('email', EmailType::class,  array('label' => 'Email'))
             ->add('plainPassword', RepeatedType::class, array(
                 'type' => PasswordType::class,
-                'first_options' => array('label' => 'Mot de passe'),
-                'second_options' => array('label' => 'Confirmation du mot de passe'),
+                'first_options' => array('label' => 'Mot de passe', 'required' => false),
+                'second_options' => array('label' => 'Confirmation du mot de passe', 'required' => false),
+                'required' => false
+            ))
+            ->add('avatar', FileType::class,  array(
+                'label' => 'Avatar',
+                'data_class' => null,
                 'required' => false
             ))
             ->add('submit', SubmitType::class, ['label'=>'Modifier', 'attr'=>['class'=>'btn-primary btn-block']])

@@ -11,6 +11,8 @@ namespace App\Controller;
 use App\Form\UserType;
 use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -30,6 +32,20 @@ class RegistrationController extends AbstractController {
             $user->setPassword($password);
             $user->setIsActive(true);
 
+            if(!empty($form['avatar']->getData())) {
+                $file = new File($user->getAvatar());
+                $fileName = md5(uniqid()).'.'.$file->guessExtension();
+                try {
+                    $file->move(
+                        $this->getParameter('avatar_directory'),
+                        $fileName
+                    );
+                } catch (FileException $e) {
+                    die($e->getMessage());
+                }
+
+                $user->setAvatar($fileName);
+            }
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
