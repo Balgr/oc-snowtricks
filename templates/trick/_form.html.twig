@@ -37,8 +37,8 @@
 
 <div id="trick_assets_add">
     <div class="prototypes">
-        <div id="videos_prototype" data-prototype="{{ form_widget(form.trickVideos.vars.prototype, {'attr': {'class': 'video_row'}})|e('html_attr') }}" data-index=0></div>
-        <div id="images_prototype" data-prototype="{{ form_widget(form.trickImages.vars.prototype, {'attr': {'class': 'image_row'}})|e('html_attr') }}" data-index=0></div>
+        <div id="videos_prototype" data-prototype="{{ form_widget(form.trickVideos.vars.prototype, {'attr': {'class': 'asset-row video_row'}})|e('html_attr') }}" data-index=0></div>
+        <div id="images_prototype" data-prototype="{{ form_widget(form.trickImages.vars.prototype, {'attr': {'class': 'asset-row image_row'}})|e('html_attr') }}" data-index=0></div>
     </div>
 </div>
 
@@ -46,13 +46,13 @@
     <div class="col-6">
         <button type="button" id="newVid">Nvlle vidéo</button>
         <div id="videosForm">
-            {{ form_widget(form.trickVideos, {'attr': {'class': 'video_row'}}) }}
+            {{ form_widget(form.trickVideos) }}
         </div>
     </div>
     <div class="col-6">
         <button type="button" id="newImg">Nvlle image</button>
         <div id="imagesForm">
-            {{ form_widget(form.trickImages, {'attr': {'class': 'image_row'}}) }}
+            {{ form_widget(form.trickImages) }}
         </div>
     </div>
 </div>
@@ -74,57 +74,62 @@
         divVideo.data('index', {{ trick.trickVideos|length }});
         divImage.data('index', {{ trick.trickImages|length }});
 
-        var deleteButton = "<button type=\"button\" class=\"close\" aria-label=\"Close\">\n" +
-            "  <span aria-hidden=\"true\">&times;</span>\n" +
-            "</button>";
+        $('#newVid').on('click', function (e) {
+            e.preventDefault();
 
-        // Add a delete button to all videos and images
-        $(".video_row").each(function (index, element) {
-            // element == this
-            element.add(deleteButton).addClass('delete_btn');
+            var divVideo = $('#videos_prototype');
+            var divImage = $('#images_prototype');
+
+            var prototype = divVideo.data('prototype');
+            var index = divVideo.data('index');
+
+            console.log(prototype);
+            var newForm = prototype.replace(/__videos_prot__/g, index);
+
+
+            divVideo.data('index', index + 1);
+
+            $('#trick_trickVideos').append(newForm);
+
+            // Add a delete button
+            var deleteButton = "<span class=\"input-group-btn\"><button type=\"button\" class=\"btn close delete-asset\" aria-label=\"Close\">\n" +
+                "  <span class=\"delete-asset\" aria-hidden=\"true\">&times;</span>\n" +
+                "</button>";
+            $('#trick_trickVideos_' + index + " .form-group").addClass("input-group").append(deleteButton);
+        });
+
+        $('#newImg').on('click', function (e) {
+            e.preventDefault();
+
+            var divVideo = $('#videos_prototype');
+            var divImage = $('#images_prototype');
+
+            var prototype = divImage.data('prototype');
+            var index = divImage.data('index');
+
+            console.log(prototype);
+
+            var newForm = prototype.replace(/__images_prot__/g, index);
+
+            divImage.data('index', index + 1);
+
+            $('#trick_trickImages').append(newForm);
+
+            // Add a delete button
+            var deleteButton = "<span class=\"input-group-btn\"><button type=\"button\" id=\"delete-image-" + index + "\" class=\"btn close delete-asset\" aria-label=\"Close\">\n" +
+                "  <span aria-hidden=\"true\">&times;</span>\n" +
+                "</button>";
+            $('#trick_trickImages_' + index + " .form-group").addClass("input-group").append(deleteButton);
+        });
+
+
+        // TODO : On click, delete asset
+        $("[id^=\"delete-image-\"]").click(function (e) {
+            console.log("Clic");
+            $(this).closest('.asset-row').remove();
         });
     });
 
-    $('#newVid').on('click', function (e) {
-        e.preventDefault();
-
-        var divVideo = $('#videos_prototype');
-        var divImage = $('#images_prototype');
-
-        var prototype = divVideo.data('prototype');
-        var index = divVideo.data('index');
-
-        console.log(prototype);
-
-        var newForm = prototype.replace(/__videos_prot__/g, index);
-
-        divVideo.data('index', index + 1);
-        divImage.data('index', index + 1);
-
-
-        $('#trick_trickVideos').append(newForm);
-        //var prototype = $(this).data()
-    });
-
-    $('#newImg').on('click', function (e) {
-        e.preventDefault();
-
-        var divVideo = $('#videos_prototype');
-        var divImage = $('#images_prototype');
-
-        var prototype = divImage.data('prototype');
-        var index = divImage.data('index');
-
-        console.log(prototype);
-
-        var newForm = prototype.replace(/__images_prot__/g, index);
-
-        divVideo.data('index', index + 1);
-        divImage.data('index', index + 1);
-
-
-        $('#trick_trickImages').append(newForm);
-    });
 </script>
 
 
