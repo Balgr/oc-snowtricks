@@ -1,1 +1,29 @@
 {% extends 'base.html.twig' %}
+{% block body %}
+    <div class="home-hero">
+        <div class="hero-text">
+            <h1>Snowtricks</h1>
+            <h3>La référence française en matière de Snowboard !</h3>
+        </div>
+    </div>
+    <div class="main-container">
+        <div class="tricks-list container">
+            <div class="row tricks-list-header">
+                <h2>Tricks</h2>
+                <div class="show-more"><a href="{{ path('trick_index') }}">Plus...</a></div>
+            </div>
+            <div class="row">
+                {% for trick in tricks %}
+                    <div class="trick-sgl card col-3 ml-auto mr-auto">
+                        <div class="trick-img"><img src="{{ asset('images/tricks/5c4205a4eeed5415356022.jpg') }}"></div>
+                        <div class="trick-content">
+                            <div class="trick-title">{{ trick.name }}</div>
+                            <div class="trick-description">{{ trick.description|striptags }}</div>
+                            <div class="trick-more"><i class="fas fa-arrow-alt-circle-right"></i></div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

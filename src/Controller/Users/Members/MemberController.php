@@ -40,12 +40,14 @@ class MemberController extends AbstractController
      */
     public function profile(Request $request) {
         $user = $this->getUser();
-        $user->setAvatar(
-            new File($this->getParameter('avatar_directory')
-                . '/'
-                . $user->getAvatar()
-            )
-        );
+        if($user->getAvatar() !== null) {
+            $user->setAvatar(
+                new File($this->getParameter('avatar_directory')
+                    . '/'
+                    . $user->getAvatar()
+                )
+            );
+        }
 
         $form = $this->createForm(ProfileType::class, $user);
         $form->get('email')->setData($user->getEmail());

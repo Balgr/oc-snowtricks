@@ -32,7 +32,7 @@ class AdminController extends AbstractController
      */
     public function index()
     {
-        return $this->render('admin/index.html.twig', ['mainNavMember' => true, 'title' => 'Espace Admin']);
+        return $this->render('admin/index.html.twig', ['mainNavAdmin' => true, 'title' => 'Espace Admin']);
     }
 
     /**

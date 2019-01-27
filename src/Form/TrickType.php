@@ -3,6 +3,8 @@
 namespace App\Form;
 
 use App\Entity\Trick;
+use App\Entity\TrickImage;
+use App\Entity\TrickVideo;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -20,24 +22,20 @@ class TrickType extends AbstractType
             ->add('trickGroup')
             ->add('trickImages', CollectionType::class, array(
                 'entry_type' => TrickImageType::class,
+                'label' => false,
                 'prototype' => true,
                 'allow_add' => true,
                 'allow_delete' => true,
-                'entry_options' => array(
-                    'required' => false
-                ),
-                'by_reference' => false
+                'prototype_name' => '__images_prot__'
             ))
-            /*->add('trickVideos', CollectionType::class, array(
+            ->add('trickVideos', CollectionType::class, array(
                 'entry_type' => TrickVideoType::class,
+                'label' => false,
                 'prototype' => true,
                 'allow_add' => true,
                 'allow_delete' => true,
-                'entry_options' => array(
-                    'required' => false
-                ),
-                'by_reference' => false
-            ))*/
+                'prototype_name' => '__videos_prot__'
+            ))
         ;
     }
 
@@ -45,6 +43,7 @@ class TrickType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Trick::class,
+            'allow_extra_fields' => true
         ]);
     }
 }

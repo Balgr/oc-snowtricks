@@ -8,6 +8,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Trick;
+use App\Repository\TrickRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -17,7 +19,11 @@ class HomepageController extends AbstractController {
      * @Route("/")
      */
     public function index() {
-        return $this->render('homepage/index.html.twig', ['mainNavHome'=>true, 'title'=>'La référence française sur le snowboard']);
+        return $this->render('homepage/index.html.twig', [
+            'mainNavHome'=>true,
+            'title'=>'La référence française sur le snowboard',
+            'tricks' => $this->getDoctrine()->getManager()->getRepository(Trick::class)->findLastTricks(6)
+            ]);
     }
 
 }

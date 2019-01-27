@@ -40,6 +40,11 @@ class Trick
     private $comments;
 
     /**
+     * @ORM\Column(type="datetime")
+     */
+    private $dateCreation;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Entity\TrickImage", mappedBy="trick", orphanRemoval=true)
      */
     private $trickImages;
@@ -128,6 +133,23 @@ class Trick
         return $this;
     }
 
+    public function __toString()
+    {
+        return "Trick - " . $this->getName();
+    }
+
+    public function getDateCreation(): ?\DateTimeInterface
+    {
+        return $this->dateCreation;
+    }
+
+    public function setDateCreation(\DateTimeInterface $dateCreation): self
+    {
+        $this->dateCreation = $dateCreation;
+
+        return $this;
+    }
+
     /**
      * @return Collection|TrickImage[]
      */
@@ -190,15 +212,13 @@ class Trick
         return $this;
     }
 
-    public function setTrickVideos(Collection $trickVideos): self
+    /**
+     * @return mixed
+     */
+    public function getAssets()
     {
-        $this->trickVideos = $trickVideos;
-
-        return $this;
-    }
-
-    public function __toString()
-    {
-        return "Trick - " . $this->getName();
+        return new ArrayCollection(
+            array_merge($this->getTrickImages()->toArray(), $this->getTrickVideos()->toArray())
+        );
     }
 }
