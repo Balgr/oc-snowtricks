@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CommentRepository")
@@ -23,32 +25,39 @@ class Comment
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Trick", inversedBy="comments")
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotBlank()
      */
     private $trick;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="comments")
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotBlank()
      */
     private $user;
 
     /**
      * @ORM\Column(type="string", length=2000)
+     * @Assert\NotBlank
      */
     private $content;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\DateTime()
+     * @Assert\NotBlank
      */
     private $creationDate;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Assert\DateTime()
      */
     private $lastEditionDate;
 
     /**
      * @ORM\Column(type="smallint")
+     * @Assert\NotBlank()
      */
     private $status;
 

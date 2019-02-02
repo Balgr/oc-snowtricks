@@ -5,24 +5,17 @@
                 <div class="header-logo">
                     <!-- TODO : Ajouter logo-->
                     <h1>SnowTricks</h1>
+                    <div class="subtitle"><p>La référence en matière de snowboard</p></div>
                 </div>
                 <div class="header-menu">
                     <ul>
                         <li><a href="{{ path('app_homepage_index') }}">Accueil</a></li>
-                        <li><a>Tricks</a></li>
-                        <li><a>Contact</a></li>
+                        <li><a href="{{ path('trick_index') }}">Tricks</a></li>
                         {% if is_granted('ROLE_USER') %}
-                            <li id="dropdownMenu2" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <a>Mon compte</a>
-                            </li>
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <button class="dropdown-item" type="button">Espace membre</button>
-                                {% if is_granted('ROLE_ADMIN') %}<button class="dropdown-item" type="button">Espace admin</button>{% endif %}
-                                <button class="dropdown-item" type="button"><a href="{{ path('logout') }}">Déconnexion</a></button>
-                            </div>
+                            <li><a href="{{ path('logout') }}">Déconnexion</a></li>
                         {% else %}
                             <li><a href="{{ path('login') }}">Connexion</a></li>
-                            <li><a href="/{{ path('app_registration_register') }}">Inscription</a></li>
+                            <li><a href="{{ path('app_registration_register') }}">Inscription</a></li>
                         {% endif %}
                     </ul>
                 </div>

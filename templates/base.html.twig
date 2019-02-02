@@ -8,6 +8,10 @@
             Snowtricks | {% if title is defined %}{{title}}{% else %}Title{% endif %}
         {% endblock %}
     </title>
+    {% block javascripts %}
+        {% include 'js.html.twig' %}
+    {% endblock %}
+
     {% block stylesheets %}
         {% include 'stylesheets.html.twig' %}
     {% endblock %}
@@ -18,10 +22,10 @@
 {% block header %}
     {% include 'header.html.twig' %}
 {% endblock %}
-
-{% block nav %}
-    {% include 'nav.html.twig' %}
-{% endblock %}
+<div id="nav-and-content">
+    {#{% block nav %}
+        {% include 'nav.html.twig' %}
+    {% endblock %}#}
 
 {% block flash %}
     {% for flash_message in app.session.flashbag.get('success') %}
@@ -48,7 +52,10 @@
 
 <div class="container main-container bck1">
     {% block body %}
+
     {% endblock %}
+</div>
+
 </div>
 
 {% block footer %}
@@ -57,10 +64,6 @@
             <h4>Footer</h4>
         </div>
     </footer>
-{% endblock %}
-
-{% block javascripts %}
-    {% include 'js.html.twig' %}
 {% endblock %}
 </body>
 </html>

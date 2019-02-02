@@ -20,6 +20,7 @@ class TrickGroup
 
     /**
      * @ORM\Column(type="string", length=25)
+     * @Assert\NotBlank
      */
     private $name;
 

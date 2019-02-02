@@ -14,6 +14,8 @@ use App\Form\ProfileType;
 use App\Form\UserType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -30,7 +32,7 @@ class AdminController extends AbstractController
      */
     public function index()
     {
-        return $this->render('admin/index.html.twig', ['mainNavMember' => true, 'title' => 'Espace Admin']);
+        return $this->render('admin/index.html.twig', ['mainNavAdmin' => true, 'title' => 'Espace Admin']);
     }
 
     /**
@@ -117,7 +119,7 @@ class AdminController extends AbstractController
                     $fileName
                 );
             } catch (FileException $e) {
-                die($e->getMessage());
+                echo $e->getMessage();
             }
 
             $user->setAvatar($fileName);

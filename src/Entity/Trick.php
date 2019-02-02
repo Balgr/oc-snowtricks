@@ -2,12 +2,17 @@
 
 namespace App\Entity;
 
+// TODO : @Assert pour vérifier les formulaires
+
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TrickRepository")
+ * @UniqueEntity("name")
  */
 class Trick
 {
@@ -20,17 +25,20 @@ class Trick
 
     /**
      * @ORM\Column(type="string", length=25)
+     * @Assert\NotBlank
      */
     private $name;
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank
      */
     private $description;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\TrickGroup", inversedBy="tricks")
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotBlank
      */
     private $trickGroup;
 
@@ -39,9 +47,28 @@ class Trick
      */
     private $comments;
 
+    /**
+     * @ORM\Column(type="datetime")
+     * @Assert\DateTime
+     * @Assert\NotBlank
+     */
+    private $dateCreation;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\TrickImage", mappedBy="trick", orphanRemoval=true)
+     */
+    private $trickImages;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\TrickVideo", mappedBy="trick", orphanRemoval=true)
+     */
+    private $trickVideos;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+        $this->trickImages = new ArrayCollection();
+        $this->trickVideos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -114,5 +141,94 @@ class Trick
         }
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return "Trick - " . $this->getName();
+    }
+
+    public function getDateCreation(): ?\DateTimeInterface
+    {
+        return $this->dateCreation;
+    }
+
+    public function setDateCreation(\DateTimeInterface $dateCreation): self
+    {
+        $this->dateCreation = $dateCreation;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|TrickImage[]
+     */
+    public function getTrickImages(): Collection
+    {
+        return $this->trickImages;
+    }
+
+    public function addTrickImage(TrickImage $trickImage): self
+    {
+        if (!$this->trickImages->contains($trickImage)) {
+            $this->trickImages[] = $trickImage;
+            $trickImage->setTrick($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTrickImage(TrickImage $trickImage): self
+    {
+        if ($this->trickImages->contains($trickImage)) {
+            $this->trickImages->removeElement($trickImage);
+            // set the owning side to null (unless already changed)
+            if ($trickImage->getTrick() === $this) {
+                $trickImage->setTrick(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|TrickVideo[]
+     */
+    public function getTrickVideos(): Collection
+    {
+        return $this->trickVideos;
+    }
+
+    public function addTrickVideo(TrickVideo $trickVideo): self
+    {
+        if (!$this->trickVideos->contains($trickVideo)) {
+            $this->trickVideos[] = $trickVideo;
+            $trickVideo->setTrick($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTrickVideo(TrickVideo $trickVideo): self
+    {
+        if ($this->trickVideos->contains($trickVideo)) {
+            $this->trickVideos->removeElement($trickVideo);
+            // set the owning side to null (unless already changed)
+            if ($trickVideo->getTrick() === $this) {
+                $trickVideo->setTrick(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAssets()
+    {
+        return new ArrayCollection(
+            array_merge($this->getTrickImages()->toArray(), $this->getTrickVideos()->toArray())
+        );
     }
 }

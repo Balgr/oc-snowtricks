@@ -20,15 +20,24 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 class UserType extends AbstractType {
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder
-            ->add('username', TextType::class, array('label' => "Nom d'utilisateur"))
-            ->add('email', EmailType::class)
+            ->add('username', TextType::class, array(
+                'label' => "Nom d'utilisateur"
+            ))
+            ->add('email', EmailType::class, array(
+                'label' => 'Email'
+            ))
             ->add('plainPassword', RepeatedType::class, array(
                 'type' => PasswordType::class,
                 'first_options' => array('label' => 'Mot de passe'),
                 'second_options' => array('label' => 'Confirmation du mot de passe'),
             ))
-            ->add('avatar', FileType::class, ['label' => 'Avatar'])
-            ->add('submit', SubmitType::class, ['label'=>'Enregistrer', 'attr'=>['class'=>'btn-primary btn-block']])
+            ->add('avatar', FileType::class, array(
+                'label' => 'Avatar'
+            ))
+            ->add('submit', SubmitType::class, array(
+                'label' => 'Enregistrer',
+                'attr' => ['class'=>'btn-primary btn-block']
+            ))
         ;
     }
 }

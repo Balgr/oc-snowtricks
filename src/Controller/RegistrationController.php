@@ -41,7 +41,7 @@ class RegistrationController extends AbstractController {
                         $fileName
                     );
                 } catch (FileException $e) {
-                    die($e->getMessage());
+                    echo $e->getMessage();
                 }
 
                 $user->setAvatar($fileName);

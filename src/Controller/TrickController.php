@@ -4,10 +4,13 @@ namespace App\Controller;
 
 use App\Entity\Comment;
 use App\Entity\Trick;
+use App\Entity\TrickVideo;
 use App\Form\CommentType;
 use App\Form\TrickType;
 use App\Repository\TrickRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -43,6 +46,14 @@ class TrickController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
+
+            $this->uploadImages($trick);
+
+            foreach($trick->getTrickVideos() as $video) {
+                $video->setTrick($trick);
+                $entityManager->persist($video);
+            }
+
             $entityManager->persist($trick);
             $entityManager->flush();
 
@@ -61,7 +72,7 @@ class TrickController extends AbstractController
     public function show(Request $request, Trick $trick): Response
     {
         // Checks if the user is logged in or not
-        if(!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
+        if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
             return $this->render('trick/show.html.twig', [
                 'trick' => $trick
             ]);
@@ -70,7 +81,7 @@ class TrickController extends AbstractController
         $comment = new Comment();
         $commentForm = $this->get('form.factory')->create(CommentType::class, $comment);
 
-        if($request->isMethod('POST')  && $commentForm->handleRequest($request)->isValid()) {
+        if ($request->isMethod('POST') && $commentForm->handleRequest($request)->isValid()) {
             $comment->setTrick($trick);
             $comment->setCreationDate(new \DateTime('now'));
             $comment->setLastEditionDate(null);
@@ -97,13 +108,24 @@ class TrickController extends AbstractController
      */
     public function edit(Request $request, Trick $trick): Response
     {
+        foreach($trick->getTrickImages() as $image) {
+            $image->setImagePath(new File($this->getParameter('trick_images_directory') . '/' . $image->getImagePath()));
+        }
+
         $form = $this->createForm(TrickType::class, $trick);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $entityManager = $this->getDoctrine()->getManager();
 
-            return $this->redirectToRoute('trick_index', [
+            $this->uploadImages($trick);
+
+            foreach($trick->getTrickVideos() as $video) {
+                $video->setTrick($trick);
+                $entityManager->persist($video);
+            }
+
+            return $this->redirectToRoute('trick_show', [
                 'id' => $trick->getId(),
             ]);
         }
@@ -119,7 +141,7 @@ class TrickController extends AbstractController
      */
     public function delete(Request $request, Trick $trick): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$trick->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $trick->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($trick);
             $entityManager->flush();
@@ -135,5 +157,29 @@ class TrickController extends AbstractController
             'trick' => $trick,
             'commentForm' => $commentForm->createView(),
         ]);
+    }
+
+    private function uploadImages(Trick $trick)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        foreach($trick->getTrickImages() as $image) {
+            $image->setTrick($trick);
+            $imageName = md5(uniqid()) . '.' . $image->getImagePath()->guessExtension();
+
+            try {
+                $image->getImagePath()->move(
+                    $this->getParameter('trick_images_directory'),
+                    $imageName
+                );
+            } catch (FileException $e) {
+                die('Erreur dans l\'upload de l\'image !');
+            }
+
+            $image->setImagePath($imageName);
+
+            $entityManager->persist($image);
+        }
+        $entityManager->persist($trick);
+        $entityManager->flush();
     }
 }
