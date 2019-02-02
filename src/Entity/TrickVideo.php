@@ -19,11 +19,13 @@ class TrickVideo
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Trick", inversedBy="trickVideos")
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotBlank
      */
     private $trick;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
     private $videoUrl;
 

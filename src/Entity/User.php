@@ -25,14 +25,15 @@ class User implements UserInterface, \Serializable
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
+     * @Assert\NotBlank
      */
     private $username;
 
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
-     * @Assert\NotBlank()
-     * @Assert\Email()
+     * @Assert\NotBlank
+     * @Assert\Email
      */
     private $email;
 

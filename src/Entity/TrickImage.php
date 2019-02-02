@@ -23,11 +23,13 @@ class TrickImage
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Trick", inversedBy="trickImages")
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotBlank
      */
     private $trick;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
     private $imagePath;
 
@@ -58,5 +60,10 @@ class TrickImage
         $this->imagePath = $imagePath;
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->imagePath;
     }
 }

@@ -2,12 +2,17 @@
 
 namespace App\Entity;
 
+// TODO : @Assert pour vérifier les formulaires
+
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TrickRepository")
+ * @UniqueEntity("name")
  */
 class Trick
 {
@@ -20,17 +25,20 @@ class Trick
 
     /**
      * @ORM\Column(type="string", length=25)
+     * @Assert\NotBlank
      */
     private $name;
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank
      */
     private $description;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\TrickGroup", inversedBy="tricks")
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotBlank
      */
     private $trickGroup;
 
@@ -41,6 +49,8 @@ class Trick
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\DateTime
+     * @Assert\NotBlank
      */
     private $dateCreation;
 
